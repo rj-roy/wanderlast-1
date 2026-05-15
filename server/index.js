@@ -1,54 +1,63 @@
-require('dotenv').config();
-const express = require('express');
-const app = express();
-const PORT = 5000;
-const cors = require('cors');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const { MongoClient, ServerApiVersion } = require("mongodb");
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-const uri = process.env.DB_URI;
+const PORT = process.env.PORT || 5000;
+
+// ✅ FIX: consistent naming
+const uri = process.env.MONGODB_URI;
+
+if (!uri) {
+  console.error("❌ MONGODB_URI is missing in environment variables");
+  process.exit(1);
+}
 
 const client = new MongoClient(uri, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    }
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
 });
 
-const run = async () => {
-    try {
-        await client.connect();
-        const db = await client.db(process.env.DB_NAM);
-        const desCollection = await db.collection(process.env.DB_COL);
+let desCollection;
 
-        app.post('/destinations', async (req, res) => {
-            const newDestination = req.body;
-            const result = await desCollection.insertOne(newDestination);
-            console.log(result, "user which are send");
-            res.send(result);
-        });
+async function run() {
+  try {
+    await client.connect();
 
-        app.get('/get-destinations', async (req, res)=>{
-            const cursor = desCollection.find();
-            const result = await cursor.toArray();
-            console.log(result);
-            res.send(result);
-        });
+    const db = client.db(process.env.DB_NAME);
+    desCollection = db.collection(process.env.DB_COLLECTION);
 
-    } finally {
-        //
-    }
-};
+    console.log("✅ MongoDB connected");
 
-run().catch(console.dir);
+  } catch (err) {
+    console.error("❌ Mongo connection failed:", err);
+    process.exit(1);
+  }
+}
 
-app.get('/', (req, res) => {
-    res.send('server is running db connected')
-})
+run();
 
-app.listen(PORT, (req, res) => {
-    console.log(`server is running on port ${PORT}`);
+app.post("/destinations", async (req, res) => {
+  const result = await desCollection.insertOne(req.body);
+  res.send(result);
+});
+
+app.get("/get-destinations", async (req, res) => {
+  const result = await desCollection.find().toArray();
+  res.send(result);
+});
+
+app.get("/", (req, res) => {
+  res.send("Server is running and DB connected");
+});
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
