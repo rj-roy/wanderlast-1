@@ -1,10 +1,9 @@
 import DestCard from "@/app/components/destinations/DestCard";
-import CardSkeleton from "@/app/components/ui/CardSkeleton";
-import { getDest } from "@/app/lib/data";
-import { Suspense, use } from "react";
+import { getDest } from "@/lib/data";
 
-const DestinationPage = () => {
-    const destinations = use(getDest())
+const DestinationPage = async () => {
+    const destinations = await getDest();
+
     return (
         <>
             <div className="w-full max-w-5xl mx-auto px-6 lg:px-12 py-10">
@@ -21,7 +20,12 @@ const DestinationPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 border border-gray-300 overflow-hidden">
                     <div className="relative border-b md:border-b-0 md:border-r border-gray-300">
                         <select className="w-full appearance-none bg-white px-4 py-4 text-sm uppercase tracking-wide text-gray-700 outline-none">
-                            <option>Category</option>
+                            <option value="all">Category</option>
+                            <option value="beach">Beach</option>
+                            <option value="city">City</option>
+                            <option value="mountain">Mountain</option>
+                            <option value="romantic">Romantic</option>
+                            <option value="luxury">Luxury</option>
                         </select>
 
                         <svg

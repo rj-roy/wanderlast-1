@@ -1,4 +1,4 @@
-import { getDest } from "@/app/lib/data";
+import { getDest } from "@/lib/data";
 import { ArrowRight, CalendarDays, MapPin, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

@@ -1,5 +1,5 @@
 import DesDForm from "@/app/components/DesDForm";
-import { formSubmitAction } from "@/app/lib/actions";
+import { formSubmitAction } from "@/lib/actions";
 
 const page = () => {
     return (
