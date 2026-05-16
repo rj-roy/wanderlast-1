@@ -18,6 +18,20 @@ const client = new MongoClient(uri, {
     }
 });
 
+const verifyToken = async (req, res, next) => {
+    const authHeader = req?.headers.authorization
+    if (!authHeader) {
+        res.status(401).json({ messege: 'unauthorized' })
+        console.log("not authorized");
+    };
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+        res.status(401).json({ messege: 'unauthorized' })
+        console.log("not authorized");
+    };
+    next();
+};
+
 const run = async () => {
     try {
         await client.connect();
@@ -30,7 +44,7 @@ const run = async () => {
             res.send(result);
         });
 
-        app.get('/get-destinations', async (req, res)=>{
+        app.get('/get-destinations', verifyToken, async (req, res) => {
             const cursor = desCollection.find();
             const result = await cursor.toArray();
             res.send(result);

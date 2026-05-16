@@ -1,12 +1,26 @@
+import { auth } from "@/lib/auth";
 import { getDest } from "@/lib/data";
 import { ArrowRight, CalendarDays, MapPin, Star } from "lucide-react";
+import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { use } from "react";
 
+
+
 const DetailsCard = ({ slug }) => {
-    const destinations = use(getDest())
-    const dest = destinations.find((d) => d.slug === slug);
+    // const {token} = await auth.api.getToken({
+    //     headers: await headers(),
+    // });
+
+    // const res = await fetch('http://localhost:5000/get-destinations',{
+    //     headers: {
+    //         authorization: `Bearer ${token}`
+    //     },
+    // });
+    // const data = await res.json();
+    const data = use(getDest())
+    const dest = data.find((d) => d.slug === slug);
     return (
         <div>
             <div className="w-full max-w-7xl mx-auto px-6 py-10">
