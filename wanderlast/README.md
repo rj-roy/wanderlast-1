@@ -1,6 +1,6 @@
-WanderLast 🌍
+## WanderLast 🌍
 
-Live Site: WanderLast Live Demo
+## Live Site: https://wanderlast-2.vercel.app/
 
 WanderLast is a modern full-stack travel destination platform built with the latest web technologies. Users can explore destinations, view destination details, and securely authenticate using Better Auth with protected client and server routes.
 
@@ -14,7 +14,7 @@ MONGODB_URI=your_mongodb_uri BETTER_AUTH_SECRET=your_secret_key BETTER_AUTH_URL=
 
 For production:
 
-BETTER_AUTH_URL=https://wanderlast-2.vercel.app 🛠️ Installation & Setup Clone the repository git clone https://github.com/rj-roy/wanderlast-1.git Navigate to project folder cd wanderlast-1 Install dependencies npm install Run development server npm run dev
+🛠️ Installation & Setup Clone the repository git clone https://github.com/rj-roy/wanderlast-1.git Navigate to project folder cd wanderlast-1 Install dependencies npm install Run development server npm run dev
 
 Open:
 
