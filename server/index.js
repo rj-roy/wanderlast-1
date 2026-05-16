@@ -27,14 +27,12 @@ const run = async () => {
         app.post('/destinations', async (req, res) => {
             const newDestination = req.body;
             const result = await desCollection.insertOne(newDestination);
-            console.log(result, "user which are send");
             res.send(result);
         });
 
         app.get('/get-destinations', async (req, res)=>{
             const cursor = desCollection.find();
             const result = await cursor.toArray();
-            console.log(result);
             res.send(result);
         });
 

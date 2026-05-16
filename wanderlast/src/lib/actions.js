@@ -13,7 +13,6 @@ export const formSubmitAction = async (formData) =>{
         cache: 'force-cache'
     });
     const data = await res.json();
-    console.log(data);
     if(data.insertedId){
         revalidatePath('/');
     };

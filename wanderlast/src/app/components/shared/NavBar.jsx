@@ -2,8 +2,11 @@
 import { useState } from "react";
 import { Link, Button } from "@heroui/react";
 import { usePathname } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 const NavBar = () => {
+    const { data: session, error, isPending } = authClient.useSession();
+
     const path = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const links = [
@@ -17,11 +20,40 @@ const NavBar = () => {
         <Link
             key={i}
             href={l.href}
-            className={`p-2 no-underline hover:text-white hover:bg-[#15a1bf] rounded-sm ${path === l.href ? "text-white bg-[#15a1bf] rounded-sm" : ""}`}
+            className={`p-2 no-underline hover:text-white hover:bg-primary rounded-sm ${path === l.href ? "text-white bg-[#15a1bf] rounded-sm" : ""}`}
         >
             {l.name}
         </Link>
-    ))
+    ));
+
+    const renderedAuth = <>{
+        isPending ?
+            <Button
+                className="w-full">
+                Loading...
+            </Button> :
+            session ?
+                <div className="md:flex text-nowrap items-center justify-center gap-3 text-center space-y-3 md:space-y-0">
+                    <h2 className="font-medium text-xl">Welcome! {session.user.name}</h2>
+                    <Button
+                        onClick={async () => await authClient.signOut()}
+                        className="w-full">
+                        SignOut
+                    </Button>
+                </div> :
+                <div className="md:flex grid grid-cols-1 gap-3">
+                    <div className="w-full mx-auto text-center border rounded-full p-1.5 px-5 border-gray-600">
+                        <Link href="/signin" className={'no-underline text-black'}>
+                            Log In
+                        </Link>
+                    </div>
+                    <Button className="w-full">
+                        <Link href="/signup" className={'no-underline text-white'}>
+                            Sign Up
+                        </Link>
+                    </Button>
+                </div>
+    }</>
 
     return (
         <div>
@@ -62,16 +94,11 @@ const NavBar = () => {
                                 )}
                             </svg>
                         </button>
-                        
+
                     </div>
 
                     <div className="hidden items-center gap-4 md:flex">
-                        <Link href="/signin" className={'no-underline'}>Login</Link>
-                        <Button>
-                            <Link href="/signup" className={'no-underline text-white'}>
-                                Sign Up
-                            </Link>
-                        </Button>
+                        {renderedAuth}
                     </div>
                 </header>
                 {isMenuOpen && (
@@ -79,16 +106,7 @@ const NavBar = () => {
                         <ul className="flex flex-col gap-2 p-4">
                             {rendeerLinks}
                             <li className="mt-4 grid gap-2 border-t border-separator pt-4">
-                                <Button className="w-full">
-                                    <Link href="/signin" className={'no-underline text-white'}>
-                                        Log In
-                                    </Link>
-                                </Button>
-                                <Button className="w-full">
-                                    <Link href="/signup" className={'no-underline text-white'}>
-                                        Sign Up
-                                    </Link>
-                                </Button>
+                                {renderedAuth}
                             </li>
                         </ul>
                     </div>

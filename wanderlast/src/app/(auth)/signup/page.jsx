@@ -8,6 +8,7 @@ import { useState } from "react";
 import googleIc from "@/assets/google-ico.png"
 import { useForm } from "react-hook-form";
 import { authClient } from "@/lib/auth-client";
+import { toast, ToastContainer } from "react-toastify";
 
 const SignUp = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -16,34 +17,37 @@ const SignUp = () => {
 
     const { handleSubmit, register } = useForm();
 
-    const onSubmit = async (data)=>{
-        // setIsLoading(true);
-        
-        console.log(data);
+    const onSubmit = async (data) => {
+        setIsLoading(true);
+
         const { name, email, password } = data;
 
-        const {data:res, error} = await authClient.signUp.email({
+        const { data: res, error } = await authClient.signUp.email({
             name: name,
             email: email,
             password: password,
-            callbackURL: '/'
+            callbackURL: '/signin'
         });
 
-        if(error){
-            console.log('error happend');
+        if (error) {
+            toast.error(error.message);
+            const Button = document.getElementById('submitBtn');
+            Button.innerText = "Sign Up"
+            setIsLoading(false);
+            return;
         };
 
-        if(res){
+        if (res) {
             alert("sign-up succeed")
-            router.push('/')
+            router.push('/signin')
         }
     };
 
     return (
         <div>
             <div className="flex items-center justify-center min-h-[calc(100vh-128px)] px-8 py-12">
+                <ToastContainer />
                 <form
-                    // onSubmit={handleSubmit(onSubmit)}
                     onSubmit={handleSubmit(onSubmit)}
                     className="bg-white border border-border rounded-2xl p-12 w-full max-w-xl">
                     <div className="font-serif text-3xl text-center mb-1">Register a Account</div>
@@ -73,7 +77,7 @@ const SignUp = () => {
                         <legend>Password</legend>
                         <input
                             minLength={8}
-                            {...register("password",{
+                            {...register("password", {
                                 required: "please enter password"
                             })}
                             type={isShowPass ? "text" : "password"} className={'bg-gray-200 p-3'} placeholder="Enter password" />
@@ -90,11 +94,13 @@ const SignUp = () => {
                         isDisabled={isLoading}
                         className={`w-full py-3 rounded-xl bg-amber text-ink font-bold text-base hover:bg-[#e09b12] transition-all flex items-center justify-center cursor-pointer`}>
                         {isLoading ? "Processing..." : "Sign Up"}
-                        {isLoading && <Loader className="w-5 h-5 animate-spin" />}
+                        <div className={`${isLoading === false ? 'hidden' : 'flex'}`}>
+                            {isLoading && <Loader className="w-5 h-5 animate-spin" />}
+                        </div>
                     </Button>
                     <div className="text-center mt-4 text-sm text-muted">
                         Already have an account?
-                        <Link href={'/login'} className="text-amber font-semibold cursor-pointer">Log In</Link>
+                        <Link href={'/signin'} className="text-amber font-semibold cursor-pointer">Log In</Link>
                     </div>
 
 

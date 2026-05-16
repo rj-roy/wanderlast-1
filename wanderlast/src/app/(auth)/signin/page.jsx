@@ -3,20 +3,39 @@ import { Button } from "@heroui/react";
 import { Loader } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import googleIc from "@/assets/google-ico.png"
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 const SignIn = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const [isShowPass, setIsShowPass] = useState(false);
-    const router = useRouter();    
+    // const [isShowPass, setIsShowPass] = useState(false);
+    const router = useRouter();
     const { handleSubmit, register } = useForm();
 
     const onSubmit = async (data) => {
-        
+        setIsLoading(true)
+        const { email, password } = data;
+        const { data: res, error } = await authClient.signIn.email({
+            email: email,
+            password: password,
+            callbackURL: '/',
+        });
+
+        if (error) {
+            toast.error(error.message);
+            const button = document.getElementById('submitBtnL');
+            button.innerText = "Sign In";
+            setIsLoading(false)
+            return;
+        };
+        if (res) {
+            toast.success('Sccessfully Signed-in');
+            router.push('/');
+        };
     };
 
     return (
@@ -49,7 +68,9 @@ const SignIn = () => {
                     type="submit" id="submitBtnL"
                     className={`w-full py-3 rounded-xl bg-amber text-ink font-bold text-base hover:bg-[#e09b12] transition-all flex items-center justify-center cursor-pointer`}>
                     {isLoading ? "Processing..." : "Sign In"}
-                    {isLoading && <Loader className="w-5 h-5 animate-spin" />}
+                    <div className={`${isLoading === false ? 'hidden' : 'flex'}`}>
+                        {isLoading && <Loader className="w-5 h-5 animate-spin" />}
+                    </div>
                 </Button>
                 <div className="text-center mt-4 text-sm text-muted">
                     Don&apos;t have an account? <Link href={'/signup'} className="text-amber font-semibold cursor-pointer">Join Free →</Link>
