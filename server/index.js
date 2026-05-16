@@ -39,7 +39,7 @@ const verifyToken = async (req, res, next) => {
         };
         next();
     } catch (error) {
-        res.status(403).json({messege: 'forbidded'})
+        res.status(403).json({ messege: 'forbidded' })
     };
 };
 
@@ -55,10 +55,23 @@ const run = async () => {
             res.send(result);
         });
 
-        app.get('/get-destinations', verifyToken, async (req, res) => {
+        app.get('/get-destinations', async (req, res) => {
             const cursor = desCollection.find();
             const result = await cursor.toArray();
             res.send(result);
+        });
+
+        app.get('/get-destinations/:slug',verifyToken, async (req, res) => {
+            const slug = req.params.slug;
+            const query = {
+                slug: slug
+            };
+
+            const destination = await desCollection.findOne(query);
+            if (!destination) {
+                return console.log("not found destination");
+            };
+            res.send(destination);
         });
 
     } finally {

@@ -10,7 +10,7 @@ const DesDForm = ({formSubmitAction}) => {
             >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="md:col-span-2">
-                        <TextField name="destinationName" isRequired>
+                        <TextField name="destination_name" isRequired>
                             <Label className="text-white">Destination Name</Label>
                             <Input placeholder="Bali Paradise" className="rounded-2xl" />
                             <FieldError />
@@ -87,7 +87,7 @@ const DesDForm = ({formSubmitAction}) => {
                     </TextField>
 
                     <div className="md:col-span-2">
-                        <TextField name="departureDate" type="date" isRequired>
+                        <TextField name="departure_date" type="date" isRequired>
                             <Label className="text-white">Departure Date</Label>
                             <Input type="date" className="rounded-2xl" />
                             <FieldError />
@@ -95,7 +95,7 @@ const DesDForm = ({formSubmitAction}) => {
                     </div>
 
                     <div className="md:col-span-2">
-                        <TextField name="imageUrl" isRequired>
+                        <TextField name="image_url" isRequired>
                             <Label className="text-white">Image URL</Label>
                             <Input
                                 type="url"

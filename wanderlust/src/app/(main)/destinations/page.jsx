@@ -1,9 +1,11 @@
 import DestCard from "@/app/components/destinations/DestCard";
-import { getDest } from "@/lib/data";
 
 const DestinationPage = async () => {
+    const getDest = async () => {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/get-destinations`);
+        return res.json();
+    };
     const destinations = await getDest();
-
     return (
         <>
             <div className="w-full max-w-5xl mx-auto px-6 lg:px-12 py-10">
@@ -95,16 +97,7 @@ const DestinationPage = async () => {
                     </div>
 
                     <div className="mt-8 min-h-125">
-                        <DestCard dest={destinations._id} />
-
-                        {/* <Suspense key={destinations._id} fallback={<CardSkeleton />} >
-                        </Suspense> */}
-                        {/* {
-                            destinations.map(dest => (
-                                
-                            ))
-                        } */}
-
+                        <DestCard dest={destinations._id} getDest={getDest} />
                     </div>
                 </div>
 

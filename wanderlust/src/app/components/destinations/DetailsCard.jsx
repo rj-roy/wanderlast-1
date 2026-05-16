@@ -1,16 +1,13 @@
-import { auth } from "@/lib/auth";
-import { getDest } from "@/lib/data";
+// 'use client'
+import { getDestBySlug } from "@/lib/data";
 import { ArrowRight, CalendarDays, MapPin, Star } from "lucide-react";
-import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
+import DateFieldD from "../DateFieldD";
 import { use } from "react";
 
-
-
 const DetailsCard = ({ slug }) => {
-    const data = use(getDest())
-    const dest = data.find((d) => d.slug === slug);
+    const dest =  use(getDestBySlug(slug));
     return (
         <div>
             <div className="w-full max-w-7xl mx-auto px-6 py-10">
@@ -36,12 +33,16 @@ const DetailsCard = ({ slug }) => {
 
                 {/* Banner Image */}
                 <div className="relative w-full h-125 overflow-hidden">
-                    <Image src={dest.image_url}
-                        alt={dest.destination_name}
-                        fill
-                        priority
-                        className="object-cover"
-                    />
+                    {
+                        !dest.image_url ? <MapPin size={70} className="object-cover group-hover:scale-105 transition duration-500 h-full w-full p-10 text-red-500" />
+                            : <Image src={dest.image_url}
+                                alt={dest.destination_name}
+                                fill
+                                priority
+                                className="object-cover"
+                            />
+                    }
+
                 </div>
 
                 {/* Content */}
@@ -143,7 +144,7 @@ const DetailsCard = ({ slug }) => {
 
                         {/* Date */}
                         <div className="border border-gray-200 px-4 py-4 mt-8 text-gray-600">
-                            {dest.departure_date}
+                            <DateFieldD />
                         </div>
 
                         {/* Button */}

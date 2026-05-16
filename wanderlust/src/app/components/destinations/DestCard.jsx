@@ -1,35 +1,31 @@
-import { getDest } from "@/lib/data";
 import Image from "next/image";
 import { Suspense, use } from "react";
-import { MapPin, CalendarDays, Star, ArrowUpRight } from "lucide-react";
+import { MapPin, CalendarDays, Star, ArrowUpRight, Plane } from "lucide-react";
 import CardSkeleton from "../ui/CardSkeleton";
 import Link from "next/link";
 
-const DestCard = ({ dest }) => {
+const DestCard = ({ dest, getDest }) => {
     const destinations = use(getDest(`${dest}`));
     return (
         <div className=" grid grid-cols-1 md:grid-cols-3 gap-5">
             {
                 destinations.map(desti =>
-                     (
+                (
                     <Suspense key={desti._id} fallback={<CardSkeleton />} >
                         <Link href={`/destinations/${desti.slug}`}>
                             <div className="group bg-white overflow-hidden">
                                 <div className="relative w-full h-60 overflow-hidden">
-                                    {/* <Image
-                                    src={desti.image_url}
-                                    alt={desti.destination_name}
-                                    fill
-                                    priority
-                                    className="object-cover group-hover:scale-105 transition duration-500"
-                                /> */}
-                                    <Image
-                                        src={desti.image_url}
-                                        alt={desti.description}
-                                        height={500}
-                                        width={500}
-                                        loading="eager"
-                                        className="object-cover group-hover:scale-105 transition duration-500 h-full" />
+                                    
+                                    {
+                                        !desti.image_url ? <MapPin size={70} className="object-cover group-hover:scale-105 transition duration-500 h-full w-full p-10 text-red-500" /> : <Image
+                                            src={desti?.image_url}
+                                            alt={desti.destination_name}
+                                            height={500}
+                                            width={500}
+                                            loading="eager"
+                                            className="object-cover group-hover:scale-105 transition duration-500 h-full" />
+                                    }
+
 
                                     <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 flex items-center gap-1 text-sm font-medium">
                                         <span>4.5</span>
