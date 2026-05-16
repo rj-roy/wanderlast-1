@@ -4,6 +4,7 @@ const app = express();
 const PORT = 5000;
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { createRemoteJWKSet, jwtVerify } = require('jose-cjs');
 
 app.use(cors());
 app.use(express.json());
@@ -18,6 +19,10 @@ const client = new MongoClient(uri, {
     }
 });
 
+const JWKS = createRemoteJWKSet(
+    new URL('http://localhost:3000/api/auth/jwks')
+);
+
 const verifyToken = async (req, res, next) => {
     const authHeader = req?.headers.authorization
     if (!authHeader) {
@@ -29,7 +34,16 @@ const verifyToken = async (req, res, next) => {
         res.status(401).json({ messege: 'unauthorized' })
         console.log("not authorized");
     };
-    next();
+    try {
+        const { payload } = await jwtVerify(token, JWKS);
+        if (!payload) {
+            res.status(401).json({ messege: 'unauthorized' })
+            console.log("not authorized");
+        };
+        next();
+    } catch (error) {
+        res.status(403).json({messege: 'forbidded'})
+    };
 };
 
 const run = async () => {
