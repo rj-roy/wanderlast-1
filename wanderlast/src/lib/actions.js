@@ -4,7 +4,7 @@ export const formSubmitAction = async (formData) =>{
     'use server'
     const newDes = Object.fromEntries(formData.entries());
     
-    const res = await fetch('https://wanderlast-1-cmfg.onrender.com/destinations',{
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destinations`,{
         method: 'POST',
         headers:{
             'content-type':'application/json'

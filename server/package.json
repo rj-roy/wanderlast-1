@@ -18,5 +18,6 @@
     "jose-cjs": "^6.2.3",
     "mongodb": "^7.2.0",
     "mongodb-uri": "^0.9.7"
-  }
+  },
+  "devDependencies": {}
 }

@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT;
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const { createRemoteJWKSet, jwtVerify } = require('jose-cjs');
@@ -20,7 +20,7 @@ const client = new MongoClient(uri, {
 });
 
 const JWKS = createRemoteJWKSet(
-    new URL('https://wanderlast-teal.vercel.app/api/auth/jwks')
+    new URL(`${process.env.NEXT_CLIENT_URL}/api/auth/jwks`)
 );
 
 const verifyToken = async (req, res, next) => {
