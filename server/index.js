@@ -20,25 +20,22 @@ const client = new MongoClient(uri, {
 });
 
 const JWKS = createRemoteJWKSet(
-    new URL('http://localhost:3000/api/auth/jwks')
+    new URL('https://wanderlast-teal.vercel.app/api/auth/jwks')
 );
 
 const verifyToken = async (req, res, next) => {
     const authHeader = req?.headers.authorization
     if (!authHeader) {
         res.status(401).json({ messege: 'unauthorized' })
-        console.log("not authorized");
     };
     const token = authHeader.split(" ")[1];
     if (!token) {
         res.status(401).json({ messege: 'unauthorized' })
-        console.log("not authorized");
     };
     try {
         const { payload } = await jwtVerify(token, JWKS);
         if (!payload) {
             res.status(401).json({ messege: 'unauthorized' })
-            console.log("not authorized");
         };
         next();
     } catch (error) {
@@ -48,7 +45,7 @@ const verifyToken = async (req, res, next) => {
 
 const run = async () => {
     try {
-        await client.connect();
+        // await client.connect();
         const db = await client.db(process.env.DB_NAM);
         const desCollection = await db.collection(process.env.DB_COL);
 

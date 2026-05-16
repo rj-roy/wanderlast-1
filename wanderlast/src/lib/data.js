@@ -7,7 +7,7 @@ export const getDest = async () => {
         headers: await headers()
     });
 
-    const res = await fetch('http://localhost:5000/get-destinations', {
+    const res = await fetch('https://wanderlast-1-cmfg.onrender.com/get-destinations', {
         cache: "no-store",
         headers: {
             authorization: `Bearer ${token}`
